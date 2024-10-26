@@ -3,6 +3,13 @@ window {
     color: #ffffff;
 }
 
+* {
+    outline: none !important;
+    -gtk-outline-radius: 0;
+    -gtk-focus-padding: 0;
+    -gtk-focus-line-width: 0;
+}
+
 .search-box {
     margin: 16px 24px;
     padding: 12px;
@@ -32,13 +39,15 @@ entry {
     padding: 8px 16px;
     margin: 4px 0;
     transition: all 0.3s ease;
+    outline: none;
 }
 
 entry:focus {
     background: rgba(255, 255, 255, 0.3);
-    border-color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    outline: none;
 }
 
 .app-list {
@@ -55,6 +64,7 @@ entry:focus {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 16px;
     transition: all 0.3s ease;
+    outline: none;
 }
 
 .app-name {
@@ -80,6 +90,7 @@ row {
     border-radius: 16px;
     position: relative;
     overflow: hidden;
+    outline: none;
 }
 
 row:hover {
@@ -109,6 +120,7 @@ row:selected {
     background: rgba(255, 255, 255, 0.2);
     transform: scale(1.02);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    outline: none;
 }
 
 row:selected::before {
@@ -131,14 +143,12 @@ row:selected .app-desc {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Hover effects */
 .app-row:hover {
     background: rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Pulsing animation for selected rows */
 @keyframes pulse {
     0% {
         box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
@@ -155,7 +165,6 @@ row:selected {
     animation: pulse 2s infinite;
 }
 
-/* Gradient border effect */
 row:selected::after {
     content: "";
     position: absolute;
@@ -171,4 +180,18 @@ row:selected::after {
         linear-gradient(#fff 0 0);
     mask-composite: exclude;
     pointer-events: none;
+}
+
+button,
+entry,
+row,
+.search-box,
+.app-row,
+*:focus,
+*:selected,
+*:active {
+    outline: none !important;
+    -gtk-outline-radius: 0;
+    -gtk-focus-padding: 0;
+    -gtk-focus-line-width: 0;
 }
