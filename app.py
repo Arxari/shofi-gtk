@@ -10,6 +10,7 @@ class ShofiGTK(Gtk.Application):
         super().__init__(application_id='shofi-gtk')
         self.apps = []
         self.filtered_apps = []
+        self.list_has_focus = False
 
     def do_activate(self):
         self.win = Gtk.ApplicationWindow(application=self)
@@ -66,12 +67,59 @@ class ShofiGTK(Gtk.Application):
         list_key_controller.connect('key-pressed', self.on_list_key_pressed)
         self.list_box.add_controller(list_key_controller)
 
+        focus_controller = Gtk.EventControllerFocus()
+        focus_controller.connect('enter', self.on_list_focus_enter)
+        focus_controller.connect('leave', self.on_list_focus_leave)
+        self.list_box.add_controller(focus_controller)
+
         self.load_applications()
         self.display_apps(self.apps[:10])
 
         self.search_entry.grab_focus()
 
         self.win.present()
+
+    def on_list_focus_enter(self, controller):
+        self.list_has_focus = True
+
+    def on_list_focus_leave(self, controller):
+        self.list_has_focus = False
+
+    def display_apps(self, apps_to_show):
+        while True:
+            child = self.list_box.get_first_child()
+            if child is None:
+                break
+            self.list_box.remove(child)
+
+        self.filtered_apps = apps_to_show
+        for app in apps_to_show:
+            self.list_box.append(self.create_app_row(app))
+
+        if self.list_has_focus:
+            first_row = self.list_box.get_row_at_index(0)
+            if first_row:
+                self.list_box.select_row(first_row)
+
+    def on_key_pressed(self, controller, keyval, keycode, state):
+        if keyval == Gdk.KEY_Down:
+            first_row = self.list_box.get_row_at_index(0)
+            if first_row:
+                self.list_box.select_row(first_row)
+                first_row.grab_focus()
+                self.list_has_focus = True
+            return True
+        elif keyval == Gdk.KEY_Up:
+            last_row = self.list_box.get_row_at_index(len(self.filtered_apps) - 1)
+            if last_row:
+                self.list_box.select_row(last_row)
+                last_row.grab_focus()
+                self.list_has_focus = True
+            return True
+        elif keyval == Gdk.KEY_Escape:
+            self.win.close()
+            return True
+        return False
 
     def load_applications(self):
         self.apps = []
@@ -135,21 +183,6 @@ class ShofiGTK(Gtk.Application):
 
         return list_box_row
 
-    def display_apps(self, apps_to_show):
-        while True:
-            child = self.list_box.get_first_child()
-            if child is None:
-                break
-            self.list_box.remove(child)
-
-        self.filtered_apps = apps_to_show
-        for app in apps_to_show:
-            self.list_box.append(self.create_app_row(app))
-
-        first_row = self.list_box.get_row_at_index(0)
-        if first_row:
-            self.list_box.select_row(first_row)
-
     def move_selection(self, direction):
         current_row = self.list_box.get_selected_row()
         if current_row:
@@ -163,29 +196,13 @@ class ShofiGTK(Gtk.Application):
                 self.list_box.select_row(new_row)
                 new_row.grab_focus()
 
-    def on_key_pressed(self, controller, keyval, keycode, state):
-        if keyval == Gdk.KEY_Down:
-            first_row = self.list_box.get_row_at_index(0)
-            if first_row:
-                self.list_box.select_row(first_row)
-                first_row.grab_focus()
-            return True
-        elif keyval == Gdk.KEY_Up:
-            last_row = self.list_box.get_row_at_index(len(self.filtered_apps) - 1)
-            if last_row:
-                self.list_box.select_row(last_row)
-                last_row.grab_focus()
-            return True
-        elif keyval == Gdk.KEY_Escape:
-            self.win.close()
-            return True
-        return False
-
     def on_list_key_pressed(self, controller, keyval, keycode, state):
         if keyval == Gdk.KEY_Up:
             current_row = self.list_box.get_selected_row()
             if current_row and current_row.get_index() == 0:
                 self.search_entry.grab_focus()
+                self.list_box.unselect_all()
+                self.list_has_focus = False
             else:
                 self.move_selection('up')
             return True
