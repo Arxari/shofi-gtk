@@ -1,0 +1,174 @@
+window {
+    background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+    color: #ffffff;
+}
+
+.search-box {
+    margin: 16px 24px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.search-label {
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-right: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+entry {
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 8px 16px;
+    margin: 4px 0;
+    transition: all 0.3s ease;
+}
+
+entry:focus {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.app-list {
+    margin: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.app-row {
+    padding: 16px 24px;
+    margin: 8px 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+.app-name {
+    font-family: "Poppins", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-desc {
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+}
+
+row {
+    padding: 12px 20px;
+    margin: 8px 0;
+    transition: all 0.3s ease;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+row:hover {
+    transform: translateX(8px);
+}
+
+.app-list {
+    counter-reset: row-number;
+}
+
+row {
+    counter-increment: row-number;
+}
+
+row:not(:selected)::before {
+    content: "0" counter(row-number);
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    margin-right: 16px;
+    font-size: 24px;
+    position: relative;
+    top: 2px;
+}
+
+row:selected {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.02);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+row:selected::before {
+    content: "0" counter(row-number);
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    color: #ffffff;
+    margin-right: 16px;
+    font-size: 24px;
+    position: relative;
+    top: 2px;
+}
+
+row:selected .app-name {
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+row:selected .app-desc {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Hover effects */
+.app-row:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Pulsing animation for selected rows */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+row:selected {
+    animation: pulse 2s infinite;
+}
+
+/* Gradient border effect */
+row:selected::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+}

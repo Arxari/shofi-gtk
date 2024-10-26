@@ -1,0 +1,1 @@
+In this folder are themes that aren't about color schemes but about changing the overall look of the launcher to showcase how much you can do with it.

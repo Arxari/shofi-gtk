@@ -1,0 +1,97 @@
+window {
+    background-color: #1a1a1a; /* Dark gray background */
+    color: #e6e6e6; /* Light gray text */
+}
+
+.search-box {
+    margin: 8px 12px;
+    padding: 0;
+}
+
+.search-label {
+    font-family: monospace;
+    font-size: 14px;
+    color: #cccccc; /* Light gray */
+    margin-right: 8px;
+}
+
+entry {
+    font-family: monospace;
+    font-size: 14px;
+    background: transparent;
+    color: #e6e6e6; /* Light gray text */
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    min-height: 0;
+    outline: none;
+    -gtk-outline-radius: 0;
+}
+
+.app-list {
+    margin: 0 8px;
+    background: transparent;
+}
+
+.app-row {
+    padding: 8px 12px;
+    background-color: transparent;
+    color: #e6e6e6; /* Light gray text */
+}
+
+.app-name {
+    font-family: monospace;
+    font-size: 13px;
+    color: #d4d4d4; /* Slightly darker gray */
+}
+
+.app-desc {
+    font-family: monospace;
+    font-size: 12px;
+    color: #999999; /* Medium gray */
+}
+
+row {
+    padding-left: 12px;
+    transition: none;
+}
+
+.app-list {
+    counter-reset: row-number;
+}
+
+row {
+    counter-increment: row-number;
+}
+
+row:not(:selected)::before {
+    content: " " counter(row-number) ")";
+    font-family: monospace;
+    color: #999999; /* Medium gray */
+    margin-right: 8px;
+}
+
+row:selected {
+    background: transparent;
+}
+
+row:selected::before {
+    content: ">" counter(row-number) ")";
+    font-family: monospace;
+    color: #ffffff;
+    margin-right: 8px;
+}
+
+row:selected .app-name {
+    color: #ffffff;
+}
+
+row:selected .app-desc {
+    color: #e6e6e6; /* Light gray text */
+}
+
+row:selected:focus {
+    outline: none;
+    box-shadow: none;
+}
