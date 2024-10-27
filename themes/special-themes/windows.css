@@ -1,0 +1,138 @@
+window {
+    background: linear-gradient(
+        to bottom,
+        rgba(20, 40, 89, 0.9),
+        rgba(17, 35, 78, 0.9)
+    );
+    color: #ffffff;
+    box-shadow: inset 0 0 70px rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Hide scrollbar */
+scrolledwindow undershoot.top,
+scrolledwindow undershoot.bottom,
+scrolledwindow overshoot.top,
+scrolledwindow overshoot.bottom,
+scrolledwindow scrollbar {
+    opacity: 0;
+    -gtk-icon-size: 0;
+    min-width: 0;
+    min-height: 0;
+}
+
+.search-box {
+    margin: 8px 12px;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.search-label {
+    font-family: "Segoe UI", sans-serif;
+    font-size: 12px;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    margin-right: 8px;
+}
+
+entry {
+    font-family: "Segoe UI", sans-serif;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    padding: 2px 6px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+    -gtk-outline-radius: 0;
+    caret-color: #ffffff;
+}
+
+entry:focus {
+    outline: none;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.app-list {
+    margin: 4px 8px;
+    background: transparent;
+}
+
+.app-row {
+    padding: 6px 12px;
+    background: transparent;
+    border-radius: 3px;
+    transition: background-color 0.15s ease;
+}
+
+.app-name {
+    font-family: "Segoe UI", sans-serif;
+    font-size: 12px;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.app-desc {
+    font-family: "Segoe UI", sans-serif;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+row {
+    padding-left: 12px;
+    transition: background-color 0.15s ease;
+}
+
+row:not(:selected)::before {
+    content: " " counter(row-number) ")";
+    font-family: "Segoe UI", sans-serif;
+    color: rgba(255, 255, 255, 0.6);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    margin-right: 8px;
+}
+
+row:selected {
+    background: linear-gradient(
+        to bottom,
+        rgba(93, 163, 236, 0.7) 0%,
+        rgba(56, 137, 220, 0.7) 50%,
+        rgba(32, 124, 218, 0.7) 51%,
+        rgba(66, 142, 220, 0.7) 100%
+    );
+    box-shadow:
+        inset 0 0 15px rgba(255, 255, 255, 0.2),
+        0 0 8px rgba(30, 116, 212, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+row:selected::before {
+    content: ">" counter(row-number) ")";
+    font-family: "Segoe UI", sans-serif;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    margin-right: 8px;
+}
+
+row:selected .app-name {
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+row:selected .app-desc {
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+row:selected:focus {
+    outline: none;
+    box-shadow:
+        inset 0 0 15px rgba(255, 255, 255, 0.2),
+        0 0 12px rgba(30, 116, 212, 0.6);
+}
