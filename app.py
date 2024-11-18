@@ -4,6 +4,7 @@ gi.require_version('Gtk', '4.0')
 from gi.repository import Gtk, Gio, GLib, Gdk
 import os
 from pathlib import Path
+import json
 
 class ShofiGTK(Gtk.Application):
     def __init__(self):
@@ -11,6 +12,41 @@ class ShofiGTK(Gtk.Application):
         self.apps = []
         self.filtered_apps = []
         self.list_has_focus = False
+        self.usage_data = {}
+        self.load_usage_data()
+
+    def load_usage_data(self):
+        data_dir = Path(os.getenv('XDG_DATA_HOME', Path.home() / '.local/share')) / 'shofi-gtk'
+        data_dir.mkdir(parents=True, exist_ok=True)
+        self.usage_file = data_dir / 'usage.json'
+
+        try:
+            if self.usage_file.exists():
+                with open(self.usage_file, 'r') as f:
+                    self.usage_data = json.load(f)
+        except Exception as e:
+            print(f"Error loading usage data: {e}")
+            self.usage_data = {}
+
+    def get_app_id(self, app): # using desktop file names, if this is a bad idea someone let me know plz
+        return app['app_info'].get_id() or app['exec']
+
+    def get_app_usage(self, app):
+        app_id = self.get_app_id(app)
+        return self.usage_data.get(app_id, 0)
+
+    def increment_app_usage(self, app):
+        app_id = self.get_app_id(app)
+        self.usage_data[app_id] = self.usage_data.get(app_id, 0) + 1
+        self.save_usage_data()
+
+    def save_usage_data(self):
+        try:
+            with open(self.usage_file, 'w') as f:
+                json.dump(self.usage_data, f)
+        except Exception as e:
+            print(f"Error saving usage data: {e}")
+
 
     def do_activate(self):
         self.win = Gtk.ApplicationWindow(application=self)
@@ -73,7 +109,10 @@ class ShofiGTK(Gtk.Application):
         self.list_box.add_controller(focus_controller)
 
         self.load_applications()
-        self.display_apps(self.apps[:10])
+        sorted_apps = sorted(self.apps,
+                           key=lambda x: (self.get_app_usage(x), x['name'].lower()),
+                           reverse=True)
+        self.display_apps(sorted_apps[:10])
 
         self.search_entry.grab_focus()
 
@@ -232,16 +271,20 @@ class ShofiGTK(Gtk.Application):
             filtered.sort(key=lambda x: (
                 not x['name'].lower().startswith(search_text),
                 not search_text in x['name'].lower(),
+                -self.get_app_usage(x),
                 x['name'].lower()
             ))
         else:
-            filtered = self.apps[:10]
+            filtered = sorted(self.apps,
+                            key=lambda x: (self.get_app_usage(x), x['name'].lower()),
+                            reverse=True)[:10]
 
         self.display_apps(filtered)
 
     def launch_app(self, app):
         try:
             app['app_info'].launch()
+            self.increment_app_usage(app)
             self.win.close()
         except Exception as e:
             print(f"Error launching {app['name']}: {e}")
