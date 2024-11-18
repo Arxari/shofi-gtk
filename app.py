@@ -47,7 +47,6 @@ class ShofiGTK(Gtk.Application):
         except Exception as e:
             print(f"Error saving usage data: {e}")
 
-
     def do_activate(self):
         self.win = Gtk.ApplicationWindow(application=self)
         self.win.set_title("Shofi-GTK")
